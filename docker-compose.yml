@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  php-apache:
+    build: .
+    container_name: php-app
+    ports:
+      - "8082:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy # Wait for MySQL to be healthy
+    networks:
+      - mynetwork
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: frontpage
+    ports:
+      - "3307:3306"  # Map 3306 inside container to 3307 on host
+    networks:
+      - mynetwork
+    healthcheck:  # Add health check to ensure MySQL is ready
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8081:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
