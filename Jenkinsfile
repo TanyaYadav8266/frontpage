@@ -35,11 +35,9 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 echo "Running PHP tests..."
-                // For PHP, you may use PHPUnit or any other PHP testing framework
-                // Make sure you have PHPUnit installed in your Dockerfile or container
-                bat "docker run --rm $DOCKER_IMAGE php vendor/bin/phpunit"  // Example for PHPUnit
-            }
-        }
+                bat "docker run --rm frontpage-php-apache php /usr/local/bin/phpunit"
+    }
+}
 
         stage('Stop and Remove Old Container') {
             steps {

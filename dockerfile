@@ -1,17 +1,20 @@
-# Use official PHP with Apache
+# Use the official PHP image with Apache
 FROM php:8-apache
 
-# Install required PHP extensions
+# Install dependencies for PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Enable Apache mod_rewrite
+# Install PHPUnit manually
+RUN curl -sS https://phar.phpunit.de/phpunit.phar -o /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+
+# Enable Apache rewrite module
 RUN a2enmod rewrite
 
-# Set working directory inside the container
+# Set the working directory inside the container
 WORKDIR /var/www/html
 
-# Copy project files to the container
+# Copy the current directory contents to /var/www/html in the container
 COPY . /var/www/html
 
-# Expose Apache Port
+# Expose port 80
 EXPOSE 80
