@@ -6,7 +6,7 @@ pipeline {
         CONTAINER_NAME = 'php-app'  // Define the container name
         PORT = '8082'  // Port to map in the container
         GIT_REPO_URL = 'https://github.com/TanyaYadav8266/frontpage.git'  // GitHub repository URL
-        GIT_CREDENTIALS_ID = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINh6XWjpFhYdOtx3f8o4Qp0FKFO8KEYp+pv5uUrR6UGl tanya8266y@gmail.com'  // The Jenkins SSH key credentials ID
+        GIT_CREDENTIALS_ID = 'github key'  // The Jenkins SSH key credentials ID
     }
 
     stages {
@@ -28,7 +28,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image..."
-                sh "docker build -t $DOCKER_IMAGE ."
+                bat "docker build -t $DOCKER_IMAGE ."
             }
         }
 
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 echo "Running tests..."
                 // Assuming your Dockerfile runs the tests, you can use the following command
-                sh """
+                bat """
                 docker run --rm $DOCKER_IMAGE npm test  # or your relevant test command
                 """
             }
@@ -45,7 +45,7 @@ pipeline {
         stage('Stop and Remove Old Container') {
             steps {
                 echo "Stopping and removing old container (if exists)..."
-                sh """
+                bat """
                 docker stop $CONTAINER_NAME || true
                 docker rm $CONTAINER_NAME || true
                 """
@@ -55,7 +55,7 @@ pipeline {
         stage('Deploy New Container') {
             steps {
                 echo "Deploying new container..."
-                sh """
+                bat """
                 docker run -d -p $PORT:80 --name $CONTAINER_NAME $DOCKER_IMAGE
                 """
             }
