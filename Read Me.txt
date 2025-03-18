@@ -12,4 +12,73 @@ credential for admin panel :
 username / email : admin/ mail@gmail.com (use any one) 
 Password : password
 
+# Multilingual Blogging Platform
+
+A vibrant, multilingual blogging platform where users can engage with content, while admins ensure quality by moderating and approving comments. This platform supports real-time cryptocurrency updates, multilingual content, and user-generated blog submissions.
+
+---
+
+## **Features**
+**User Features:**
+   - Read blogs in multiple languages.
+   - Comment on articles (admin-moderated).
+   - Submit blog posts via the "Write for Us" page.
+   - Access real-time cryptocurrency updates.
+
+**Admin Features:**
+   - Approve or reject user comments.
+   - Manage blog submissions and content.
+
+**Technical Features:**
+   - Dockerized PHP and MySQL backend.
+   - Real-time monitoring with Prometheus and Grafana.
+   - Scalable infrastructure using Kubernetes (AWS EKS).
+
+---
+
+## **Tech Stack**
+- **Frontend/Backend:** PHP, MySQL
+- **Containerization:** Docker
+- **CI/CD:** Jenkins
+- **Monitoring:** Prometheus, Grafana
+- **Orchestration:** Kubernetes (AWS EKS)
+- **Infrastructure as Code:** Terraform
+
+---
+
+## **Setup Instructions**
+
+### **Prerequisites**
+- Docker and Docker Compose installed.
+- AWS account for Kubernetes (EKS) deployment (optional).
+
+### **Steps to Run Locally**
+Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/multilingual-blogging-platform.git
+   cd multilingual-blogging-platform
+
+1. Start the application using Docker Compose: docker-compose up -d
+
+2. Access the application:
+Frontend: http://localhost:8082
+phpMyAdmin: http://localhost:8081
+Grafana: http://localhost:3000 (username: admin, password: admin)
+
+3. (Optional) Deploy to AWS EKS using Terraform: 
+terraform init
+terraform apply
+
+Structure:
+multilingual-blogging-platform/
+├── frontpage/               # PHP application code
+├── docker-compose.yml       # Docker Compose configuration
+├── Dockerfile               # Dockerfile for PHP app
+├── prometheus.yml           # Prometheus configuration
+├── grafana/                 # Grafana dashboards and config
+├── terraform/               # Terraform scripts for AWS EKS
+└── README.md                # Project documentation
+
+
+This README file provides a comprehensive overview of our project, including setup instructions, features, and technical details.
 ==============================FIND MORE PROJECTS AT HTTPS://ALPHACODECAMP.COM.NG =====================
