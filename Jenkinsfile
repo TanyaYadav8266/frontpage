@@ -2,48 +2,38 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "frontpage-app"
-        CONTAINER_NAME = "frontpage-container"
-        PORT = "8082"
+        GIT_REPO_URL = 'https://github.com/TanyaYadav8266/frontpage.git'
+        GIT_CREDENTIALS_ID = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINh6XWjpFhYdOtx3f8o4Qp0FKFO8KEYp+pv5uUrR6UGl tanya8266y@gmail.com'  // The ID you provided when adding the SSH key
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                echo "Cloning repository..."
-                git branch: 'main', url: 'https://github.com/TanyaYadav8266/frontpage.git', depth: 1
+                script {
+                    // Checkout the code using SSH credentials
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        userRemoteConfigs: [[
+                            url: "${GIT_REPO_URL}",
+                            credentialsId: "${GIT_CREDENTIALS_ID}"
+                        ]])
+                }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
-                echo "Building Docker image..."
-                sh "docker build -t $DOCKER_IMAGE ."
+                echo "Building project..."
+                // Your build steps here
             }
         }
 
-        stage('Stop and Remove Old Container') {
+        stage('Deploy') {
             steps {
-                echo "Stopping old container (if exists)..."
-                sh """
-                docker stop $CONTAINER_NAME || true
-                docker rm $CONTAINER_NAME || true
-                """
-            }
-        }
-
-        stage('Run New Container') {
-            steps {
-                echo "Deploying new container..."
-                sh """
-                docker run -d -p $PORT:80 --name $CONTAINER_NAME $DOCKER_IMAGE
-                """
-            }
-        }
-
-        stage('Post Deployment') {
-            steps {
-                echo "Deployment successful! Access the website at http://localhost:$PORT"
+                echo "Deploying project..."
+                // Your deploy steps here
             }
         }
     }
