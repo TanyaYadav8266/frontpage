@@ -34,30 +34,25 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                echo "Running tests..."
-                // Assuming your Dockerfile runs the tests, you can use the following command
-                bat """
-                docker run --rm $DOCKER_IMAGE npm test  # or your relevant test command
-                """
+                echo "Running PHP tests..."
+                // For PHP, you may use PHPUnit or any other PHP testing framework
+                // Make sure you have PHPUnit installed in your Dockerfile or container
+                bat "docker run --rm $DOCKER_IMAGE php vendor/bin/phpunit"  // Example for PHPUnit
             }
         }
 
         stage('Stop and Remove Old Container') {
             steps {
                 echo "Stopping and removing old container (if exists)..."
-                bat """
-                docker stop $CONTAINER_NAME || true
-                docker rm $CONTAINER_NAME || true
-                """
+                bat "docker stop $CONTAINER_NAME || true"
+                bat "docker rm $CONTAINER_NAME || true"
             }
         }
 
         stage('Deploy New Container') {
             steps {
                 echo "Deploying new container..."
-                bat """
-                docker run -d -p $PORT:80 --name $CONTAINER_NAME $DOCKER_IMAGE
-                """
+                bat "docker run -d -p $PORT:80 --name $CONTAINER_NAME $DOCKER_IMAGE"
             }
         }
 
